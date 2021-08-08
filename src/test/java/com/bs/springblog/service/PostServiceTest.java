@@ -1,12 +1,17 @@
 package com.bs.springblog.service;
 
+import com.bs.springblog.controller.dto.PostForm;
+import com.bs.springblog.controller.dto.PostReponseDto;
+import com.bs.springblog.controller.dto.PostUpdateRequestDto;
 import com.bs.springblog.domain.posts.Post;
 import com.bs.springblog.domain.posts.PostRepository;
+import com.bs.springblog.validator.PostValidator;
 import org.assertj.core.api.Assert;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -24,62 +29,60 @@ class PostServiceTest {
     @Test
     public void 게시글_저장_테스트(){
         //given
-        Post post = postInit();
+        PostForm postForm = postInit();
         //when
-        Long findId = postService.save(post);
+        Long findId = postService.save(postForm);
         //then
         Assertions.assertThat(postRepository.findById(findId)).isNotEmpty();
     }
     @Test
     public void 게시글_수정_테스트() throws Exception {
         //given
-        Post post = postInit();
-        Long saveId = postService.save(post);
+        PostForm postForm = postInit();
+        Long saveId = postService.save(postForm);
         String title = "UpdateTest";
         String content = "UpdateTest";
-        Post updateParam = Post.builder().title(title).content(content).build();
+        PostUpdateRequestDto updateParam = PostUpdateRequestDto.builder().title(title).content(content).build();
         //when
-        Long updateId = postService.update(saveId, updateParam);
+        Long updateId = postService.update(saveId,updateParam);
         //then
-        Post updatedPost = postService.findOneById(updateId);
+        PostReponseDto updatedPost = postService.findOneById(updateId);
         Assertions.assertThat(updatedPost.getTitle()).isEqualTo(title);
     }
 
     @Test
     public void 게시글_한건_조회_테스트(){
         //given
-        Post post = postInit();
-        Long saveId = postService.save(post);
+        PostForm postForm = postInit();
+        Long saveId = postService.save(postForm);
         //when
-        Post findPost = postService.findOneById(saveId);
+        PostReponseDto findPost = postService.findOneById(saveId);
         //then
         Assertions.assertThat(findPost.getId()).isEqualTo(saveId);
     }
     @Test
     public void 게시글_여러건_조회_테스트(){
         //given
-        Post post = postInit();
-        Post post2 = postInit();
-        Post post3 = postInit();
+        PostForm post = postInit();
+        PostForm post2 = postInit();
+        PostForm post3 = postInit();
         Long saveId = postService.save(post);
         Long saveId2 = postService.save(post2);
         Long saveId3 = postService.save(post3);
         //when
-        List<Post> posts = postService.findAll();
+        List<PostReponseDto> posts = postService.findAll();
         //then
         Assertions.assertThat(posts.size()).isEqualTo(3);
     }
 
-    public Post postInit(){
+    public PostForm postInit(){
         String title = "test";
         String content = "test";
         String author = "park";
-        Post post = Post.builder()
-                .title(title)
-                .content(content)
-                .author(author)
-                .build();
-        return post;
+        PostForm postForm = PostForm.builder().title(title).content(content).build();
+        return postForm;
     }
+
+
 
 }

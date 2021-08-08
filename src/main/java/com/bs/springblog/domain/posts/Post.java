@@ -1,6 +1,7 @@
 package com.bs.springblog.domain.posts;
 
 import com.bs.springblog.domain.BaseTimeEntity;
+import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

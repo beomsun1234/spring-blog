@@ -1,5 +1,7 @@
 package com.bs.springblog.domain.posts;
 
+import com.bs.springblog.controller.dto.PostForm;
+import com.bs.springblog.validator.PostValidator;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.xml.validation.Validator;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
@@ -21,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class PostRepositoryTest {
 
+    @Autowired
+    private PostValidator postValidator;
     @Autowired
     private PostRepository postRepository;
 
@@ -47,8 +52,9 @@ class PostRepositoryTest {
         List<Post> posts = postRepository.findAll();
         //then
         Assertions.assertThat(posts.get(0).getTitle()).isEqualTo(title);
-
     }
+
+
 
     public String postInit(){
         String title = "test";
