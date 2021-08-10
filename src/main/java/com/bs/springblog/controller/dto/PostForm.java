@@ -1,5 +1,6 @@
 package com.bs.springblog.controller.dto;
 
+import com.bs.springblog.domain.Member.Member;
 import com.bs.springblog.domain.posts.Post;
 import lombok.Builder;
 import lombok.Data;
@@ -25,14 +26,18 @@ public class PostForm {
     @Lob
     private String content;
 
+    private Long memberId;
+
+
 
     @Builder
-    public PostForm(String title, String content){
+    public PostForm(String title, String content,Long memberId){
         this.title = title;
         this.content = content;
+        this.memberId = memberId;
     }
 
-    public Post toEntity(){
+    public Post toEntity(Member member){
         return Post.builder()
                 .title(title)
                 .content(content)

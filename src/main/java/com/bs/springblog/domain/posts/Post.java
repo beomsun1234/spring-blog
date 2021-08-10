@@ -1,6 +1,7 @@
 package com.bs.springblog.domain.posts;
 
 import com.bs.springblog.domain.BaseTimeEntity;
+import com.bs.springblog.domain.Member.Member;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import javax.persistence.*;
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long id;
 
     private String title;
@@ -26,18 +28,25 @@ public class Post extends BaseTimeEntity {
     private String author;
 
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+
+    //포스트생성
     @Builder
     public Post(String title, String content, String author){
         this.title = title;
         this.content = content;
         this.author = author;
-
     }
 
     public void update(String title, String content){
         this.title = title;
         this.content = content;
     }
-
-
+    public void setMember(Member member){
+        this.member = member;
+        member.getPosts().add(this);
+    }
 }

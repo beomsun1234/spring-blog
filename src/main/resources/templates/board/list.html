@@ -10,7 +10,14 @@
 
 <div class="container">
     <h2>게시판</h2>
-    <div>총 건수 : <span th:text="${posts.size()}"></span></div>
+    <div>총 건수 : <span th:text="${posts.getTotalElements()}"></span></div>
+    <form class="form-inline d-flex justify-content-end" method="GET" th:action="@{/board/list}">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="searchText" class="sr-only">검색</label>
+            <input type="text" class="form-control" id="searchText"  name="searchText" th:value="${param.searchText}">
+        </div>
+        <button type="submit" class="btn btn-light mb-2">검색</button>
+    </form>
     <table class="table">
         <thead>
         <tr>
@@ -21,12 +28,29 @@
         </thead>
         <tbody>
         <tr th:each="post : ${posts}">
-            <th th:text="${post.id}"></th>
-            <td><a th:text="${post.title}" th:href="@{/board/list/{id} (id = ${post.id})}"></a> </td>
-            <td th:text="${post.author}"></td>
+            <th th:text="${post.getId()}"></th>
+            <td><a th:text="${post.getTitle()}" th:href="@{/board/list/{id} (id = ${post.id})}"></a> </td>
+            <td th:text="${post.getAuthor()}"></td>
         </tr>
         </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${1 == posts.pageable.pageNumber + 1} ? 'disabled'">
+                <a class="page-link" href="#" tabindex="-1"
+                   th:href="@{/board/list(page=${posts.pageable.pageNumber - 1 }, searchText= ${param.searchText})}"
+                   aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${i == posts.pageable.pageNumber + 1} ? 'disabled'" th:each="i: ${#numbers.sequence(startPage,endPage)}">
+                <a class="page-link" href="#"
+                   th:href="@{/board/list(page=${i - 1}, searchText= ${param.searchText})}"
+                   th:if="${i}!=0" th:text="${i}"></a></li>
+            <li class="page-item" th:classappend="${posts.totalPages == posts.pageable.pageNumber + 1 || posts.totalPages== 0} ? 'disabled'">
+                <a class="page-link" href="#"
+                   th:href="@{/board/list(page=${posts.pageable.pageNumber + 1 }, searchText= ${param.searchText})}">Next</a>
+            </li>
+        </ul>
+    </nav>
     <div class="text-right">
         <a type="button" class="btn btn-primary" th:href="@{/board/form}">작성</a>
     </div>
@@ -34,8 +58,5 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
