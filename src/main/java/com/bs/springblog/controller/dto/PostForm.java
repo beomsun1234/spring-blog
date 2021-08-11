@@ -28,12 +28,15 @@ public class PostForm {
 
     private Long memberId;
 
+    private String author;
+
 
 
     @Builder
-    public PostForm(String title, String content,Long memberId){
+    public PostForm(String title, String content,String author,Long memberId){
         this.title = title;
         this.content = content;
+        this.author = author;
         this.memberId = memberId;
     }
 
@@ -41,6 +44,7 @@ public class PostForm {
         return Post.builder()
                 .title(title)
                 .content(content)
+                .author(author)
                 .build();
     }
 

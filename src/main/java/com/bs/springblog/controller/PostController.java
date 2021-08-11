@@ -1,6 +1,7 @@
 package com.bs.springblog.controller;
 
 
+import com.bs.springblog.config.auth.dto.SessionUser;
 import com.bs.springblog.controller.dto.PostForm;
 import com.bs.springblog.controller.dto.PostReponseDto;
 import com.bs.springblog.controller.dto.PostUpdateRequestDto;
@@ -29,6 +30,7 @@ import java.util.List;
 @Controller
 @RequestMapping("board")
 public class PostController {
+    private final HttpSession httpSession;
     private final PostService postService;
     private final PostValidator postValidator;
     /**
@@ -57,6 +59,8 @@ public class PostController {
     @GetMapping("/form")
     public String form(Model model){
         log.info("open postForm");
+        SessionUser member = (SessionUser)httpSession.getAttribute("member");
+        model.addAttribute("member", member);
         model.addAttribute("postForm", new PostForm());
         return "board/form";
     }
