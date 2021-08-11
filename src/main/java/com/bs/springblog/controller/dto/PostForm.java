@@ -37,7 +37,7 @@ public class PostForm {
         this.memberId = memberId;
     }
 
-    public Post toEntity(Member member){
+    public Post toEntity(){
         return Post.builder()
                 .title(title)
                 .content(content)

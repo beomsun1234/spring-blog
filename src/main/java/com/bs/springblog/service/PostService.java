@@ -31,7 +31,7 @@ public class PostService {
 
     public Long save(PostForm postForm){
         Member member = memberRepository.findById(postForm.getMemberId()).orElseThrow(IllegalArgumentException::new);
-        Post post = postForm.toEntity(member);
+        Post post = postForm.toEntity();
         post.setMember(member);
         return postRepository.save(post).getId();
     }

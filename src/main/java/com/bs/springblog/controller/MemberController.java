@@ -13,6 +13,10 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/loginForm")
+    public String login(){
+        return "member/join";
+    }
 
 //    @GetMapping
 //    public String join(){

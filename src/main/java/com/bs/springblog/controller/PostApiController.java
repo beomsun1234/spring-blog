@@ -1,6 +1,7 @@
 package com.bs.springblog.controller;
 
 
+import com.bs.springblog.config.auth.dto.SessionUser;
 import com.bs.springblog.controller.dto.PostForm;
 import com.bs.springblog.controller.dto.PostReponseDto;
 import com.bs.springblog.controller.dto.PostUpdateRequestDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("api")
 public class PostApiController {
     private final PostService postService;
+    private final HttpSession httpSession;
     /**
      * 게시글 저장
      * @return
