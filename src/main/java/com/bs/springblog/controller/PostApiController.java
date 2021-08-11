@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -27,7 +28,7 @@ public class PostApiController {
      * @return
      */
     @PostMapping("/v1/post")
-    public Long save(@RequestBody PostForm postForm){
+    public Long save(@Valid @RequestBody PostForm postForm){
         log.info("api-save요청옴");
         return postService.save(postForm);
     }

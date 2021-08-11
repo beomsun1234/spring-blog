@@ -26,8 +26,10 @@ public class PostForm {
     @Lob
     private String content;
 
+    @NotNull(message = "로그인을 해야 글을 작성할수 있습니다!")
     private Long memberId;
 
+    @NotBlank(message = "로그인을 해야 글을 작성할수 있습니다!")
     private String author;
 
 
