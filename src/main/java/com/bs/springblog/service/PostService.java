@@ -63,5 +63,10 @@ public class PostService {
         Page<Post> findPost = postRepository.findByTitleContainingOrContentContaining(title, content, pageable);
         return findPost.map(PostReponseDto::new);
     }
+    @Transactional(readOnly = true)
+    public List<PostReponseDto> findAllFetch(){
+        List<Post> posts = postRepository.findAll();
+        return posts.stream().map(PostReponseDto::new).collect(Collectors.toList());
+    }
     
 }

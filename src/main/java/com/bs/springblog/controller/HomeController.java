@@ -2,6 +2,7 @@ package com.bs.springblog.controller;
 
 
 import com.bs.springblog.config.auth.dto.SessionUser;
+import com.bs.springblog.controller.dto.Guest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,11 @@ public class HomeController {
         SessionUser member = (SessionUser)httpSession.getAttribute("member");
         if(member!=null){
             model.addAttribute("member", member);
+            model.addAttribute("profile", member.getPicture());
+        }
+        else{
+            Guest guest = Guest.builder().id( 00L).name("guest").build();
+            model.addAttribute("member", guest);
         }
         log.info("home open");
         return "home";

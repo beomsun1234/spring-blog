@@ -2,13 +2,11 @@ package com.bs.springblog.controller;
 
 
 import com.bs.springblog.config.auth.dto.SessionUser;
-import com.bs.springblog.controller.dto.Guest;
-import com.bs.springblog.controller.dto.PostForm;
-import com.bs.springblog.controller.dto.PostReponseDto;
-import com.bs.springblog.controller.dto.PostUpdateRequestDto;
+import com.bs.springblog.controller.dto.*;
 import com.bs.springblog.domain.Member.Member;
 import com.bs.springblog.domain.posts.Post;
 import com.bs.springblog.service.PostService;
+import com.bs.springblog.service.ReplyService;
 import com.bs.springblog.validator.PostValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +32,7 @@ import java.util.UUID;
 public class PostController {
     private final HttpSession httpSession;
     private final PostService postService;
+    private final ReplyService replyService;
     private final PostValidator postValidator;
     /**
      *
@@ -98,7 +97,10 @@ public class PostController {
         // 그럴려면 작성자 id와 세션id를 비교하여 아니면 못쓰게
         PostReponseDto findPost = postService.findOneById(id);
         SessionUser loginMember = (SessionUser) httpSession.getAttribute("member");
+        List<ReplyResponseDto> reply = replyService.findByPostId(id);
+        model.addAttribute("boardId", id);
         model.addAttribute("postForm", findPost);
+        model.addAttribute("reply", reply);
         if (loginMember == null){
             //로그인 안할시 게스트 계정생성 보기만가능하게하기
             log.info("guest로그인");
@@ -114,7 +116,6 @@ public class PostController {
         }
         return "/board/detail";
     }
-
 
     /**
      * update

@@ -6,6 +6,7 @@ import com.bs.springblog.controller.dto.PostForm;
 import com.bs.springblog.controller.dto.PostReponseDto;
 import com.bs.springblog.controller.dto.PostUpdateRequestDto;
 import com.bs.springblog.domain.posts.Post;
+import com.bs.springblog.domain.posts.PostRepository;
 import com.bs.springblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.util.List;
 public class PostApiController {
     private final PostService postService;
     private final HttpSession httpSession;
+    private final PostRepository postRepository;
     /**
      * 게시글 저장
      * @return
@@ -57,10 +59,10 @@ public class PostApiController {
      * 여러건 조회
      * dto로 반환하기
      */
-//    @GetMapping("/v1/post")
-//    public List<PostReponseDto> findAll() throws Exception {
-//        List<PostReponseDto> posts = postService.findAll();
-//        return posts;
-//    }
+    @GetMapping("/v1/post")
+    public List<PostReponseDto> findAll() throws Exception {
+        List<PostReponseDto> posts = postService.findAllFetch();
+        return posts;
+    }
 
 }

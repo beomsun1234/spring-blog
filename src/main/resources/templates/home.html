@@ -1,19 +1,25 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragment/common :: head('Hello, there!')">
     <!-- Required meta tags -->
 </head>
 
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragment/common :: menu(home)"></nav>
-
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragment/common :: menu(home)">
+</nav>
+<a class="btn btn-secondary mx-3 my-2 my-sm-0" th:href="@{/loginForm}" type="button"
+   sec:authorize="!isAuthenticated()">로그인</a>
+<form class="form-inline my-2 my-lg-0" sec:authorize="isAuthenticated()">
+    <img src="" th:src="${member.picture}">
+    <span class="text-black" th:text="${member.name}">사용자</span>
+    <a class="btn btn-secondary my-2 my-sm-0" th:href="@{/logout}" type="button">로그아웃</a>
+</form>
 <main role="main" class="container">
-
     <div class="starter-template">
         <h1>Welcome My Blog</h1>
         <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
     </div>
-
 </main><!-- /.container -->
 
 <!-- Optional JavaScript -->

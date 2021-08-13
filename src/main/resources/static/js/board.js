@@ -5,7 +5,10 @@ let index = {
         });
         $("#btn-update").on("click",()=>{
             this.update();
-        })
+        });
+        $("#btn-replySave").on("click",()=> {
+            this.replySave();
+        });
     },
 
     save:function () {
@@ -43,7 +46,30 @@ let index = {
             data_type:"json"
         }).done(function (resp) {
             alert("수정이 완료되었습니다.");
-            window.location.href="/board/list";
+            window.location.href="/";
+        }).fail(function (error){
+            alert(JSON.stringify(error));
+        });
+    },
+
+    replySave:function () {
+        let id = $("#board-id").val();
+        alert(id);
+        let data = {
+            content: $("#reply-content").val(),
+            postId : id,
+            memberId : $("#member-id").val()
+        };
+        alert(data.content);
+        $.ajax({
+            type:"POST",
+            url: "http://localhost:8080/api/v1/post/"+id+"/reply",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            data_type:"json"
+        }).done(function (resp) {
+            alert("리플작성 완료되었습니다.");
+            window.location.href="/board/detail/"+id;
         }).fail(function (error){
             alert(JSON.stringify(error));
         });
