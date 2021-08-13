@@ -2,18 +2,20 @@ package com.bs.springblog.domain.posts;
 
 import com.bs.springblog.domain.BaseTimeEntity;
 import com.bs.springblog.domain.Member.Member;
+import com.bs.springblog.domain.Reply.Reply;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.*;
 
 
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "Posts")
+@Table(name = "posts")
 public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +33,10 @@ public class Post extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Reply> replys = new ArrayList<>();
 
 
     //포스트생성

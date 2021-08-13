@@ -9,6 +9,7 @@ import com.bs.springblog.domain.posts.Post;
 import com.bs.springblog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -36,7 +37,7 @@ public class PostApiController {
      * 게시글 수정
      */
     @PutMapping("/v1/post/{id}")
-    public Long update(@PathVariable Long id,@RequestBody PostUpdateRequestDto postUpdateRequestDtoForm) throws Exception {
+    public Long update(@PathVariable Long id,@RequestBody @Valid PostUpdateRequestDto postUpdateRequestDtoForm) throws Exception {
         log.info("api-update요청옴");
         Long updatedId = postService.update(id, postUpdateRequestDtoForm);
         return updatedId;

@@ -2,6 +2,9 @@ package com.bs.springblog.domain.Reply;
 
 
 import com.bs.springblog.domain.BaseTimeEntity;
+import com.bs.springblog.domain.Member.Member;
+import com.bs.springblog.domain.posts.Post;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "Replys")
+@Table(name = "replys")
 public class Reply extends BaseTimeEntity{
 
     @Id
@@ -20,8 +23,35 @@ public class Reply extends BaseTimeEntity{
 
     private String content;
 
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
+
+    @Builder
+    public Reply(String content){
+        this.content = content;
+    }
+
+    public void setMember(Member member){
+        this.member = member;
+        member.getReplys().add(this);
+    }
+    public void setPost(Post post){
+        this.post = post;
+        post.getReplys().add(this);
+    }
 
     /**
-     * 생성자에 유저와 post넣기
+     * update
+     * @param content
      */
+    public void update(String content){
+        this.content = content;
+
+    }
+
 }

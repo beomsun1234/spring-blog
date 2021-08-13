@@ -2,6 +2,7 @@ package com.bs.springblog.controller;
 
 
 import com.bs.springblog.config.auth.dto.SessionUser;
+import com.bs.springblog.controller.dto.Guest;
 import com.bs.springblog.controller.dto.PostForm;
 import com.bs.springblog.controller.dto.PostReponseDto;
 import com.bs.springblog.controller.dto.PostUpdateRequestDto;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 
 @Slf4j
@@ -60,6 +62,11 @@ public class PostController {
     public String form(Model model){
         log.info("open postForm");
         SessionUser member = (SessionUser)httpSession.getAttribute("member");
+        if (member == null){
+            //맴버가 없으면 로그인페이지로
+            log.info("로그인해야합니다");
+            return "member/join";
+        }
         model.addAttribute("member", member);
         model.addAttribute("postForm", new PostForm());
         return "board/form";
@@ -85,22 +92,45 @@ public class PostController {
      * @param
      * @return
      */
+    @GetMapping("/detail/{id}")
+    public String openDetail(Model model, @PathVariable Long id){
+        //작성자만 글 수정 가능
+        // 그럴려면 작성자 id와 세션id를 비교하여 아니면 못쓰게
+        PostReponseDto findPost = postService.findOneById(id);
+        SessionUser loginMember = (SessionUser) httpSession.getAttribute("member");
+        model.addAttribute("postForm", findPost);
+        if (loginMember == null){
+            //로그인 안할시 게스트 계정생성 보기만가능하게하기
+            log.info("guest로그인");
+            Long guestId = Long.valueOf(0);
+            Guest guest = Guest.builder()
+                    .id(guestId)
+                    .name("guest")
+                    .build();
+            model.addAttribute("loginMember", guest);
+        }
+        else {
+            model.addAttribute("loginMember", loginMember);
+        }
+        return "/board/detail";
+    }
+
+
+    /**
+     * update
+     *
+     * @param id
+     * @return+
+     * @throws Exception
+     */
     @GetMapping("/list/{id}")
-    public String openPost(Model model, @PathVariable Long id){
+    public String openUpdateForm(Model model, @PathVariable Long id){
         PostReponseDto findPost = postService.findOneById(id);
         log.info("open updateForm");
         model.addAttribute("postForm", findPost);
         model.addAttribute("id", id);
         return "/board/updateForm";
     }
-
-    /**
-     * update
-     * @param postForm
-     * @param id
-     * @return
-     * @throws Exception
-     */
 //    @PostMapping("/list/{id}")
 //    public String updatePost(PostUpdateRequestDto postForm, @PathVariable Long id) throws Exception {
 //        postService.update(id,postForm);

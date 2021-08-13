@@ -1,6 +1,7 @@
 package com.bs.springblog.domain.Member;
 
 
+import com.bs.springblog.domain.Reply.Reply;
 import com.bs.springblog.domain.posts.Post;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,12 +9,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name = "members")
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +29,17 @@ public class Member {
 
     private String email;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private AuthenticationProvider authenticationProvider;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Reply> replys = new ArrayList<>();
 
 
     @Builder

@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
 <head th:replace="fragment/common :: head('게시판')">
     <!-- Required meta tags -->
 
@@ -21,7 +22,7 @@
         </div>
         <div class="form-group">
             <label for="content" class="form-label">내용</label>
-            <textarea class="form-control summernote" id="content" rows="5"
+            <textarea th:disabled="${member.id.SIZE ==0} ? disable" class="form-control summernote" id="content" rows="5"
                       th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'" th:field="${postForm.content}"></textarea>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="${postForm.content}">
                 제목 에러 메시지
@@ -32,10 +33,10 @@
             <input id="author" type="text" th:field="${member.name}" class="form-control">
         </div>
     </form>
-    <div class="text-right">
-        <button type="submit" id="btn-save" class="btn btn-primary">확인</button>
+    <div class="text-right" >
+        <button type="submit" id="btn-save" class="btn btn-primary" sec:authorize="isAuthenticated()">확인</button>
         <!-- <button type="submit" class="btn btn-primary">확인</button> -->
-        <a type="button" class="btn btn-primary" th:href="@{/board/list}">취소</a>
+        <a type="button" class="btn btn-primary" th:href="@{/board/list}" th:if="authenticated" th:text="취소">뒤로가기</a>
     </div>
 </div>
 <!-- Optional JavaScript -->

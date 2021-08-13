@@ -29,7 +29,7 @@
         <tbody>
         <tr th:each="post : ${posts}">
             <th th:text="${post.getId()}"></th>
-            <td><a th:text="${post.getTitle()}" th:href="@{/board/list/{id} (id = ${post.id})}"></a> </td>
+            <td><a th:text="${post.getTitle()}" th:href="@{/board/detail/{id} (id = ${post.id})}"></a> </td>
             <td th:text="${post.getAuthor()}"></td>
         </tr>
         </tbody>
