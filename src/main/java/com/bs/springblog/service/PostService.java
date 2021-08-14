@@ -68,5 +68,6 @@ public class PostService {
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(PostReponseDto::new).collect(Collectors.toList());
     }
+
     
 }

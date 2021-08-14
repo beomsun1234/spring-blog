@@ -7,6 +7,7 @@ import com.bs.springblog.domain.posts.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 
@@ -32,8 +33,10 @@ public class Reply extends BaseTimeEntity{
     private Member member;
 
     @Builder
-    public Reply(String content){
+    public Reply(String content, Post post ,Member member){
         this.content = content;
+        this.setPost(post);
+        this.setMember(member);
     }
 
     public void setMember(Member member){

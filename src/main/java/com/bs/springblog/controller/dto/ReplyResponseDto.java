@@ -13,14 +13,12 @@ import javax.persistence.ManyToOne;
 @Getter
 public class ReplyResponseDto {
     private Long id;
-
     private String content;
-
     private Long postId;
     private String author;
     private Long memberId;
 
-    //디티오로 엔티티로
+    //디티오를 엔티티로
     public ReplyResponseDto(Reply entity){
         this.id = entity.getId();
         this.content = entity.getContent();

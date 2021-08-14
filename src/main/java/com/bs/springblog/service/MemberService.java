@@ -1,8 +1,7 @@
 package com.bs.springblog.service;
 
 
-import com.bs.springblog.controller.dto.PostForm;
-import com.bs.springblog.controller.dto.PostReponseDto;
+import com.bs.springblog.controller.dto.MemberResponseDto;
 import com.bs.springblog.domain.Member.Member;
 import com.bs.springblog.domain.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +19,12 @@ public class MemberService {
     @Transactional
     public Long save(Member member){
         return memberRepository.save(member).getId();
+    }
+
+    @Transactional(readOnly = true)
+    public MemberResponseDto findById(Long id){
+        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("회원이 없습니다!"));
+        return new MemberResponseDto(member);
     }
 
 

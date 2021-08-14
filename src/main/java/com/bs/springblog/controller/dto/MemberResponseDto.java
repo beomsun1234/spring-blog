@@ -1,15 +1,16 @@
-package com.bs.springblog.config.auth.dto;
+package com.bs.springblog.controller.dto;
 
 import com.bs.springblog.domain.Member.AuthenticationProvider;
 import com.bs.springblog.domain.Member.Member;
 import com.bs.springblog.domain.Member.Role;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+
 
 @Getter
-public class SessionUser implements Serializable {
+public class MemberResponseDto {
     private Long id;
     private String name;
     private String email;
@@ -18,9 +19,9 @@ public class SessionUser implements Serializable {
     private AuthenticationProvider authenticationProvider;
 
 
-
     //세션유저(dto) -> 엔티티로
-    public SessionUser(Member member) {
+
+    public MemberResponseDto(Member member) {
         this.id = member.getId();
         this.name = member.getName();
         this.email = member.getEmail();

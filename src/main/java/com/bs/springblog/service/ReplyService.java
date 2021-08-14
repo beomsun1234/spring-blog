@@ -1,9 +1,7 @@
 package com.bs.springblog.service;
 
 
-import com.bs.springblog.config.auth.dto.SessionUser;
-import com.bs.springblog.controller.dto.PostReponseDto;
-import com.bs.springblog.controller.dto.ReplyRequestDTO;
+import com.bs.springblog.controller.dto.ReplySaveRequestDto;
 import com.bs.springblog.controller.dto.ReplyResponseDto;
 import com.bs.springblog.domain.Member.Member;
 import com.bs.springblog.domain.Member.MemberRepository;
@@ -16,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,30 +22,41 @@ import java.util.stream.Collectors;
 @Service
 public class ReplyService {
     private final ReplyRepository replyRepository;
-    private final HttpSession session;
-    private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
 
+    /**
+     * 저장
+     * @param boardId
+     * @param replySaveRequestDto
+     * @return
+     */
     @Transactional
-    public Long save(Long boardId,ReplyRequestDTO replyRequestDTO){
-        Reply reply = replyRequestDTO.replyRequestDTOtoEntity();
-        Long postId = replyRequestDTO.getPostId();
-        Member member = memberRepository.findById(replyRequestDTO.getMemberId()).orElseThrow(()-> new IllegalArgumentException("유저가 없습니다"));
-        Post post= postRepository.findById(boardId).orElseThrow(()-> new IllegalArgumentException("글이 없습니다!"));;
-        log.info("replyRequestDTO boardId={}",postId);
-        log.info("boardId={}",boardId);
-        reply.setMember(member);
-        reply.setPost(post);
-        return reply.getId();
+    public Long save(Long boardId, ReplySaveRequestDto replySaveRequestDto){
+        //PostReponseDto post= postService.findOneById(boardId);
+        Member member = memberRepository.findById(replySaveRequestDto.getMemberId())
+                .orElseThrow(()-> new IllegalArgumentException("없음"));
+        Post post = postRepository.findById(boardId)
+                .orElseThrow(()-> new IllegalArgumentException("없음"));
+        Reply reply = replySaveRequestDto.replyRequestDTOtoEntity(member,post);
+        return replyRepository.save(reply).getId();
     }
+    
     @Transactional(readOnly = true)
     public List<ReplyResponseDto> findAll(){
         List<Reply> replies = replyRepository.findAll();
         return replies.stream().map(ReplyResponseDto::new).collect(Collectors.toList());
     }
+
+
+    /**
+     * 해당 게시판에 쓰여진 댓글 조회
+     * @param boardId ->게시판 id
+     * @return
+     */
     @Transactional(readOnly = true)
-    public List<ReplyResponseDto> findByPostId(Long id){
-        List<Reply> replies = replyRepository.findByPostId(id);
+    public List<ReplyResponseDto> findByPostId(Long boardId){
+        List<Reply> replies = replyRepository.findByPostId(boardId);
         return replies.stream().map(ReplyResponseDto::new).collect(Collectors.toList());
     }
 }
